@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">	<title>Location Tracker</title>
+</head>
+<body>
+<h1>Hello world!!</h1>
+<button id = "start" onclick="callStartAPI()"> Start</button>
+<!-- <button id = "start" onclick="check()"> Stop</button> -->
+<script>
+	function callStartAPI() {
+	const coordinates = [];
+	const stoppedLocations = [];
+	var i = 0;
+	var times = [new Date().getTime()];
+		navigator.geolocation.watchPosition(data => {
+			startTime = new Date().getTime();
+			if(startTime - times[i] >= 5000) {
+					// console.log("Point to be noted")
+					stoppedLocations.push([data.coords.longitude, data.coords.latitude]);
+					i = 0;
+					times = [new Date().getTime()];
+					console.log("After noting the stopeed locations")
+					console.log(stoppedLocations)
+					console.log("--------------------------------------")
+					// break;
+			} else {
+				times.push(startTime);
+				console.log("successive times");
+				console.log(times);
+				console.log("--------------------------------------")
+				i++;
+			};
+			coordinates.push([data.coords.longitude, data.coords.latitude]);
+			window.localStorage.setItem("coordinates",JSON.stringify(coordinates));
+			window.localStorage.setItem("stoppedLocation",JSON.stringify(stoppedLocations));
+		}), (error) => console.log("error in navigation.geolocation",error), {
+			enableHighAccuracy:true
+		};
+	}
+</script>
+</body>
+</html>
